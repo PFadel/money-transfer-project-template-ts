@@ -13,7 +13,7 @@ export async function moneyTransfer(details: PaymentDetails): Promise<string> {
       initialInterval: '1 second',
       maximumInterval: '1 minute',
       backoffCoefficient: 2,
-      maximumAttempts: 500,
+      maximumAttempts: 3,
       nonRetryableErrorTypes: ['InvalidAccountError', 'InsufficientFundsError'],
     },
     startToCloseTimeout: '1 minute',
@@ -36,9 +36,7 @@ export async function moneyTransfer(details: PaymentDetails): Promise<string> {
     let refundResult;
     try {
       refundResult = await refund(details);
-      throw ApplicationFailure.create({
-        message: `Failed to deposit money into account ${details.targetAccount}. Money returned to ${details.sourceAccount}. Cause: ${depositErr}.`,
-      });
+      return `Transfer complete (transaction IDs: ${withdrawResult}, ${refundResult})`;
     } catch (refundErr) {
       throw ApplicationFailure.create({
         message: `Failed to deposit money into account ${details.targetAccount}. Money could not be returned to ${details.sourceAccount}. Cause: ${refundErr}.`,

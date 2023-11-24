@@ -7,17 +7,13 @@ export async function withdraw(details: PaymentDetails): Promise<string> {
     `Withdrawing $${details.amount} from account ${details.sourceAccount}.\n\n`
   );
   const bank1 = new BankingService('bank1.example.com');
-  try {
-    const result = await bank1.withdraw(
-      details.sourceAccount,
-      details.amount,
-      details.referenceId
-    );
-    return result;
-  } catch (error) {
-    throw new Error('Unexpected error occurred');
-  }
-};
+  const result = await bank1.withdraw(
+    details.sourceAccount,
+    details.amount,
+    details.referenceId
+  );
+  return result;
+}
 // @@@SNIPEND
 
 // @@@SNIPSTART money-transfer-project-template-ts-deposit-activity
@@ -27,21 +23,21 @@ export async function deposit(details: PaymentDetails): Promise<string> {
   );
   const bank2 = new BankingService('bank2.example.com');
   // Uncomment lines 30-34 and comment lines 35-44 to simulate an unknown failure
-  // return await bank2.depositThatFails(
-  //   details.targetAccount,
-  //   details.amount,
-  //   details.referenceId
-  // );
-  try {
-    const result = await bank2.deposit(
-      details.sourceAccount,
-      details.amount,
-      details.referenceId
-    );
-    return result;
-  } catch (error) {
-    throw new Error('Unexpected error occurred');
-  }
+  return await bank2.depositThatFails(
+    details.targetAccount,
+    details.amount,
+    details.referenceId
+  );
+  //try {
+  //  const result = await bank2.deposit(
+  //    details.sourceAccount,
+  //    details.amount,
+  //    details.referenceId
+  //  );
+  //  return result;
+  //} catch (error) {
+  //  throw new Error('Unexpected error occurred');
+  //}
 }
 // @@@SNIPEND
 
